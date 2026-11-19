@@ -1,0 +1,35 @@
+use_bpm 120
+
+# Drums: Kick, snare, and hi-hats running in a continuous loop
+live_loop :drums do
+  sample :bd_haus, amp: 1.5
+  sleep 0.5
+  sample :drum_cymbal_closed, amp: 0.6
+  sleep 0.5
+  sample :bd_haus, amp: 1.5
+  sample :sn_dolf, amp: 1.2
+  sleep 0.5
+  sample :drum_cymbal_closed, amp: 0.6
+  sleep 0.5
+end
+
+# Bassline: Deep, filtered synth bass synced to the drums
+live_loop :bass do
+  sync :drums
+  use_synth :tb303
+  notes = (ring :c2, :c2, :eb2, :g1, :bb1, :c2, :g1, :eb1)
+  play notes.tick, release: 0.3, cutoff: rrand(60, 95), amp: 0.6
+  sleep 0.25
+end
+
+# Lead Melody: Ethereal arpeggio with reverb and echo
+live_loop :melody do
+  sync :drums
+  use_synth :prophet
+  with_fx :reverb, room: 0.8 do
+    with_fx :echo, phase: 0.375, mix: 0.4 do
+      play scale(:c4, :minor_pentatonic).choose, release: 0.4, cutoff: 85, amp: 0.5
+      sleep 0.5
+    end
+  end
+end
